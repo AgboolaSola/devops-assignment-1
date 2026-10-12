@@ -61,3 +61,17 @@ if [[ -z "$RESOLVED_IP" ]]; then
 fi
 echo "Resolved $HOST to $RESOLVED_IP"
 log "Resolved $HOST to $RESOLVED_IP"
+
+# Basic connectivity check
+STATUS=0
+
+if ping -c 1 -W 2 "$HOST" > /dev/null 2>&1; then
+  echo "Connectivity: $HOST is reachable"
+  log "Connectivity OK: $HOST replied to ping"
+else
+  echo "Connectivity: $HOST did not reply to ping"
+  log "Connectivity failed: $HOST did not reply to ping"
+  STATUS=1
+fi
+
+exit "$STATUS"
