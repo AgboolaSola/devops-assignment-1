@@ -53,4 +53,16 @@ if [[ ! -e "$TARGET_PATH" ]]; then
   log "Invalid input: path '$TARGET_PATH' doesn't exist"
   exit 2
 fi
-echo "Threshold OK: $THRESHOLD%"
+USAGE=$(df -P "$TARGET_PATH" | awk 'NR==2 {print $5}' | tr -d '%')
+echo "Disk usage for $TARGET_PATH: $USAGE% (threshold: $THRESHOLD%)"
+
+# Check 5: disk usage
+if [[ $USAGE -ge $THRESHOLD ]]; then 
+ echo "Warning: $USAGE% usage reaches or goes over the threshold $THRESHOLD%"
+ log "Warning: $TARGET_PATH usage $USAGE% reached threshold $THRESHOLD%"
+ exit 1
+else
+ echo "OK: disk usage $USAGE% is below the threshold $THRESHOLD%" 
+ log "OK: $TARGET_PATH usage $USAGE% is below threshold $THRESHOLD%"
+ exit 0
+fi
