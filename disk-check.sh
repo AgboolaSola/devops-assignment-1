@@ -46,4 +46,11 @@ if [[ "$THRESHOLD" -lt 1 || "$THRESHOLD" -gt 100 ]]; then
   exit 2
 fi
 
+# Check 4: does the path exist
+if [[ ! -e "$TARGET_PATH" ]]; then
+  echo "Error: path '$TARGET_PATH' does not exist." >&2
+  usage
+  log "Invalid input: path '$TARGET_PATH' doesn't exist"
+  exit 2
+fi
 echo "Threshold OK: $THRESHOLD%"
