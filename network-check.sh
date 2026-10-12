@@ -52,5 +52,12 @@ if [[ -n "$PORT"  && ("$PORT" -lt 1 || "$PORT" -gt 65535 ) ]]; then
  exit 2
 fi 
 
+RESOLVED_IP="$(getent hosts "$HOST" | head -n 1 | awk '{print $1}')"
 
-echo "Input OK: host=$HOST port=${PORT:-none}"
+if [[ -z "$RESOLVED_IP" ]]; then
+  echo "Error: could not resolve '$HOST'." >&2
+  log "Failed: could not resolve '$HOST'"
+  exit 1
+fi
+echo "Resolved $HOST to $RESOLVED_IP"
+log "Resolved $HOST to $RESOLVED_IP"
