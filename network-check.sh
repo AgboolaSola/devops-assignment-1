@@ -76,5 +76,17 @@ fi
 echo "Network interfaces:"
 ip -brief address
 log "Displayed network interface information"
+
+# TCP port check (only if a port was given)
+if [[ -n "$PORT" ]]; then
+  if timeout 3 bash -c "echo > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+    echo "Port $PORT on $HOST is open"
+    log "Port check OK: $HOST:$PORT is open"
+  else
+    echo "Port $PORT on $HOST is closed or unreachable"
+    log "Port check failed: $HOST:$PORT is closed or unreachable"
+    STATUS=1
+  fi
+fi
 exit "$STATUS"
 
