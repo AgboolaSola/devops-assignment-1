@@ -73,5 +73,8 @@ else
   log "Connectivity failed: $HOST did not reply to ping"
   STATUS=1
 fi
-
+echo "Network interfaces:"
+ip -brief address
+log "Displayed network interface information"
 exit "$STATUS"
+
